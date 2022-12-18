@@ -5,6 +5,10 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const passportJWT = require('passport-jwt')
 
+const JwtStrategy = passportJWT.Strategy
+const ExtractJwt = passportJWT.ExtractJwt
+
+let count = 0
 
 passport.use(new LocalStrategy(
   {
@@ -24,15 +28,43 @@ passport.use(new LocalStrategy(
           .then(res => {
             if (!res) {
               req.authError = '密碼錯誤'
+              // count ++
+              // if(count >= 5) {
+              //   user.locked = true
+              // }
               return cb(null, false)
             }
+
+            return cb(null, user)
           })
       })
   }
-
-
-
 ))
 
+const jwtOptions= {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme(),
+  secretOrKey: process.env.JWT_SECRET
+}
+
+passport.use(new JwtStrategy(jwtOptions, (jwtPayload, cb) => {
+  User.findByPk(jwtPayload.id)
+  .then(user => {
+    cb(null, user)
+  })
+  .catch(err => cb(err))
+}))
 
 
+passport.serializeUser((user, cb) => {
+  cb(null, user.id)
+})
+
+passport.deserializeUser((id, cb) => {
+  User.findByPk(id)
+  .then(user => {
+    cb(null, user.toJSON())
+  })
+  .catch(err => cb(err))
+})
+
+module.exports = passport

@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('../../config/passport')
+const userController = require('../../controllers/user-controller')
 
 
-router.post('/users/signin')
+router.post('/users/signin', passport.authenticate('local', { session: false, failWithError: true }, userController.signIn))
