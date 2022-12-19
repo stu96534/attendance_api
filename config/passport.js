@@ -8,6 +8,7 @@ const passportJWT = require('passport-jwt')
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
 
+
 passport.use(new LocalStrategy(
   {
     usernameField: 'email',
@@ -25,12 +26,26 @@ passport.use(new LocalStrategy(
 
         return bcrypt.compare(password, user.password)
           .then(res => {
-            if (!res) {
-              req.authError = "密碼錯誤！"
+            const errCount = user.toJSON().errCount
+            if (errCount >= 5) {
+              user.update({
+                locked: true,
+                errCount: 0
+              })
+            }
+
+            if (user.toJSON().locked) {
+              req.authError = "密碼錯誤達五次，已上鎖"
               return cb(null, false)
             }
-// console.log(req)
-            // console.log(user)
+
+            if (!res) {
+              user.increment({ errCount: 1})
+              
+              req.authError = "密碼錯誤！"
+              
+              return cb(null, false)
+            }
             return cb(null, user)
           })
       })
@@ -59,7 +74,6 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   User.findByPk(id)
     .then(user => {
-      console.log(user)
       cb(null, user.toJSON())
     })
     .catch(err => cb(err))

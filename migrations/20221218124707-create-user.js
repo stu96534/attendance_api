@@ -29,6 +29,9 @@ module.exports = {
       overtime: {
         type: Sequelize.INTEGER
       },
+      err_count: {
+        type: Sequelize.INTEGER
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

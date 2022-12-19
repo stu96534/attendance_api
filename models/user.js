@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.INTEGER,
     image: DataTypes.STRING,
     locked: DataTypes.BOOLEAN,
-    overtime: DataTypes.INTEGER
+    overtime: DataTypes.INTEGER,
+    errCount: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',

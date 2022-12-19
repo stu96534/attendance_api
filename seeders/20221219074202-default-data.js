@@ -10,6 +10,7 @@ module.exports = {
       password:  bcrypt.hashSync(password, bcrypt.genSaltSync(10),null),
       image: `https://loremflickr.com/320/240/people/?random=${Math.random() * 100}`,
       locked: false,
+      err_count: 0,
       created_at: new Date(),
       updated_at: new Date()
 
