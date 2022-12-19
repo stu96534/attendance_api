@@ -27,21 +27,22 @@ passport.use(new LocalStrategy(
         return bcrypt.compare(password, user.password)
           .then(res => {
             const errCount = user.toJSON().errCount
-            if (errCount >= 5) {
+            const locked = user.toJSON().locked
+
+            if (errCount >= 5) {              // 密碼錯誤5次上鎖
               user.update({
                 locked: true,
                 errCount: 0
               })
             }
 
-            if (user.toJSON().locked) {
+            if (locked) {                    // 上鎖後拋出的錯誤
               req.authError = "密碼錯誤達五次，已上鎖"
               return cb(null, false)
             }
 
-            if (!res) {
+            if (!res) {                      // 密碼錯誤拋出錯誤
               user.increment({ errCount: 1})
-              
               req.authError = "密碼錯誤！"
               
               return cb(null, false)
