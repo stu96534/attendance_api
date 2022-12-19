@@ -1,25 +1,22 @@
 'use strict';
 const bcrypt = require('bcryptjs')
 const faker = require('faker')
+const password = 'titaner'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+    await queryInterface.bulkInsert('Users', Array.from({ length: 20 }).map((_, i) => ({
+      name: faker.name.findName(),
+      email: `user${i}@example.com`,
+      password:  bcrypt.hashSync(password, bcrypt.genSaltSync(10),null),
+      image: `https://loremflickr.com/320/240/people/?random=${Math.random() * 100}`,
+      locked: false,
+      created_at: new Date(),
+      updated_at: new Date()
+
+    })) ,{})
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete('Users', null, {});
   }
 };

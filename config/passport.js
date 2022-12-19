@@ -8,7 +8,6 @@ const passportJWT = require('passport-jwt')
 const JwtStrategy = passportJWT.Strategy
 const ExtractJwt = passportJWT.ExtractJwt
 
-let count = 0
 
 passport.use(new LocalStrategy(
   {
