@@ -5,9 +5,8 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const passportJWT = require('passport-jwt')
 
-const JwtStrategy = passportJWT.Strategy
-const ExtractJwt = passportJWT.ExtractJwt
-
+const JWTStrategy = passportJWT.Strategy
+const ExtractJWT = passportJWT.ExtractJwt
 
 passport.use(new LocalStrategy(
   {
@@ -15,42 +14,41 @@ passport.use(new LocalStrategy(
     passwordField: 'password',
     passReqToCallback: true
   },
+
   (req, email, password, cb) => {
-    User.findOne({ where: email })
+    User.findOne({ where: { email } })
       .then(user => {
         if (!user) {
-          req.authError = '此帳號不存在'
+          req.authError = "此帳號不存在！"
           return cb(null, false)
         }
 
         return bcrypt.compare(password, user.password)
           .then(res => {
             if (!res) {
-              req.authError = '密碼錯誤'
-              // count ++
-              // if(count >= 5) {
-              //   user.locked = true
-              // }
+              req.authError = "密碼錯誤！"
               return cb(null, false)
             }
-
+// console.log(req)
+            // console.log(user)
             return cb(null, user)
           })
       })
   }
 ))
 
-const jwtOptions= {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme(),
+const jwtOptions = {
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET
 }
 
-passport.use(new JwtStrategy(jwtOptions, (jwtPayload, cb) => {
+passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
+
   User.findByPk(jwtPayload.id)
-  .then(user => {
-    cb(null, user)
-  })
-  .catch(err => cb(err))
+    .then(user => {
+      cb(null, user)
+    })
+    .catch(err => cb(err))
 }))
 
 
@@ -60,10 +58,13 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser((id, cb) => {
   User.findByPk(id)
-  .then(user => {
-    cb(null, user.toJSON())
-  })
-  .catch(err => cb(err))
+    .then(user => {
+      console.log(user)
+      cb(null, user.toJSON())
+    })
+    .catch(err => cb(err))
 })
+
+
 
 module.exports = passport
