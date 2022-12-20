@@ -6,7 +6,7 @@ const userController = {
       delete userData.password
 
       if (userData.locked) {
-        res.status(401).json({
+        return res.status(401).json({
           status: 'error',
           message: '密碼錯誤達五次，已上鎖'
         })
