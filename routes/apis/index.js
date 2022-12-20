@@ -14,4 +14,6 @@ router.use('/attendant', authenticate, attendant)
 
 router.use('/', (req, res) => res.redirect('/api/attendant'))
 
+router.use('/', (req, res) => res.redirect('/api/attendant'))
+
 module.exports = router
