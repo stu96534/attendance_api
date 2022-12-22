@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const { User } = require('../models')
+
 const userController = {
   signIn: (req, res, next) => {
     try {
@@ -20,14 +23,51 @@ const userController = {
 
       res.status(200).json({
         status: 'success',
-        data: {
-          token,
-          user: userData
-        }
+        token,
+        user: userData
       })
     } catch (err) {
       next(err)
     }
+  },
+  getUser: (req, res, next) => {
+    return res.status(200).json({
+      email: req.user.email,
+    })
+  },
+  editUser: (req, rea, next) => {
+    const userId = req.user.userId
+    const { email, password, newPassword, checkPassword } = req.body
+    const { email: currentEmail, password: currentPassword } = req.user
+
+    if (email !== currentEmail) {
+      return res.status(401).json({
+        status: 'error',
+        message: '你不是此帳號的用戶！'
+      })
+    }
+
+    if (password !== currentPassword) {
+      return res.status(401).json({
+        status: 'error',
+        message: '請輸入正確的密碼！'
+      })
+    }
+
+     User.findByPk(userId)
+      .then(user => {
+        user.update({
+          password: bcrypt.hash(newPassword, getslat(10), null)
+        })
+      })
+      .then(() => {
+       return res.status(200).json({
+          status: 'success',
+          message: '密碼更新成功！'
+        })
+      })
+      .catch(err => next(err))
+
   }
 
 }
