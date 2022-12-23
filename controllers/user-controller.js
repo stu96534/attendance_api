@@ -31,42 +31,60 @@ const userController = {
     }
   },
   getUser: (req, res, next) => {
+
     return res.status(200).json({
       email: req.user.email,
     })
+    
   },
-  editUser: (req, rea, next) => {
-    const userId = req.user.userId
-    const { email, password, newPassword, checkPassword } = req.body
-    const { email: currentEmail, password: currentPassword } = req.user
+  editUser: async (req, res, next) => {
 
-    if (email !== currentEmail) {
-      return res.status(401).json({
-        status: 'error',
-        message: '你不是此帳號的用戶！'
-      })
-    }
+    try {
 
-    if (password !== currentPassword) {
-      return res.status(401).json({
-        status: 'error',
-        message: '請輸入正確的密碼！'
-      })
-    }
+      const userId = req.user.userId
+      const { email, password, newPassword, checkPassword } = req.body
+      const { email: currentEmail, password: currentPassword } = req.user
 
-     User.findByPk(userId)
-      .then(user => {
-        user.update({
-          password: bcrypt.hash(newPassword, getslat(10), null)
+      if (email !== currentEmail) {
+        return res.status(401).json({
+          status: 'error',
+          message: '帳號錯誤！'
         })
-      })
-      .then(() => {
-       return res.status(200).json({
-          status: 'success',
-          message: '密碼更新成功！'
+      }
+
+      if (password !== currentPassword) {
+        return res.status(401).json({
+          status: 'error',
+          message: '原密碼錯誤！'
         })
+      }
+
+      if (newPassword !== checkPassword) {
+        return res.status(401).json({
+          status: 'error',
+          message: '新密碼與確認密碼不相符！'
+        })
+      }
+
+      const user = await User.findByPk(userId)
+
+      await user.update({
+        password: bcrypt.hashSync(newPassword, getslatSync(10), null)
       })
-      .catch(err => next(err))
+
+
+      return res.status(200).json({
+        status: 'success',
+        message: '密碼更新成功！'
+      })
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+    
+
 
   }
 
