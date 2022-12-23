@@ -3,6 +3,7 @@ const router = express.Router()
 const passport = require('../../config/passport')
 
 const attendant = require('./modules/attendant')
+const users = require('./modules/users')
 const userController = require('../../controllers/user-controller')
 const { authenticated } = require('../../middleware/auth')
 const { authErrorHandler, apiErrorHandler } = require('../../middleware/error-handler')
@@ -11,6 +12,8 @@ const { authErrorHandler, apiErrorHandler } = require('../../middleware/error-ha
 router.post('/users/signin', passport.authenticate('local', { session: false, failWithError: true }), userController.signIn, authErrorHandler)
 
 router.use('/attendant', attendant)
+
+router.use('/users', passport.authenticate('jwt', { session: false }), users)
 
 router.use('/', (req, res) => res.redirect('/api/attendant'))
 

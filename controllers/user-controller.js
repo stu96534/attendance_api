@@ -18,7 +18,8 @@ const userController = {
       req.user.update({
         errCount: 0
       })
-
+      console.log(userData)
+      // console.log(req)
       const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' })
 
       res.status(200).json({
@@ -31,45 +32,53 @@ const userController = {
     }
   },
   getUser: (req, res, next) => {
-
+    console.log(req)
     return res.status(200).json({
       email: req.user.email,
     })
-    
+
   },
   editUser: async (req, res, next) => {
 
     try {
 
-      const userId = req.user.userId
+      const userId = req.user.id
+      const id = req.params.id
       const { email, password, newPassword, checkPassword } = req.body
       const { email: currentEmail, password: currentPassword } = req.user
+
+      if (Number(id) !== Number(userId)) {
+        return res.status(401).json({
+          status: 'error',
+          message: '無法編輯此用戶！'
+        })
+      }
 
       if (email !== currentEmail) {
         return res.status(401).json({
           status: 'error',
-          message: '帳號錯誤！'
+          message: '帳號錯誤，請重新輸入！'
         })
       }
 
-      if (password !== currentPassword) {
+      if (!bcrypt.compareSync(password, currentPassword)) {
         return res.status(401).json({
           status: 'error',
-          message: '原密碼錯誤！'
+          message: '原密碼錯誤，請重新輸入！'
         })
       }
 
       if (newPassword !== checkPassword) {
         return res.status(401).json({
           status: 'error',
-          message: '新密碼與確認密碼不相符！'
+          message: '新密碼與確認密碼不相符，請重新輸入！'
         })
       }
 
       const user = await User.findByPk(userId)
 
       await user.update({
-        password: bcrypt.hashSync(newPassword, getslatSync(10), null)
+        password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10), null)
       })
 
 
@@ -83,8 +92,6 @@ const userController = {
       console.log(error)
 
     }
-    
-
 
   }
 
