@@ -3,13 +3,14 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('Users', 
-    'isAdmin',
+    'is_admin',
     { 
       type: Sequelize.BOOLEAN 
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Users')
+    await queryInterface.removeColumn('Users',
+      'is_admin')
   }
 };

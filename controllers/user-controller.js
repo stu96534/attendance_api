@@ -7,7 +7,7 @@ const userController = {
     try {
       const userData = req.user.toJSON()
       delete userData.password
-
+      console.log(userData)
       if (userData.locked) {
         return res.status(401).json({
           status: 'error',

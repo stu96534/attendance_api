@@ -12,7 +12,7 @@ module.exports = {
       image: `https://loremflickr.com/320/240/people/?random=${Math.random() * 100}`,
       locked: false,
       err_count: 0,
-      isAdmin: true,
+      is_admin: true,
       created_at: new Date(),
       updated_at: new Date()
 
@@ -25,7 +25,7 @@ module.exports = {
       image: `https://loremflickr.com/320/240/people/?random=${Math.random() * 100}`,
       locked: false,
       err_count: 0,
-      isAdmin: false,
+      is_admin: false,
       created_at: new Date(),
       updated_at: new Date()
 
