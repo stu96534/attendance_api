@@ -29,19 +29,35 @@ passport.use(new LocalStrategy(
             const errCount = user.toJSON().errCount
             const locked = user.toJSON().locked
 
-            if (errCount >= 5) {              // 密碼錯誤5次上鎖
-              user.update({
-                locked: true,
-                errCount: 0
-              })
+            // 密碼錯誤5次上鎖
+            if (errCount >= 5) { 
+              if (user.isAdmin) {
+                // 管理者密碼錯誤達五次，恢復成預設密碼
+                user.update({
+                  password: bcrypt.hashSync('tiadmin', bcrypt.genSaltSync(10), null),
+                  errCount: 0
+                })
+
+                req.authError = "密碼錯誤達五次，已恢復成預設密碼"
+                return cb(null, false)
+              } else {
+               // 使用者密碼錯誤達五次上鎖
+                user.update({
+                  locked: true,
+                  errCount: 0
+                })
+              }            
+              
             }
 
-            if (locked) {                    // 上鎖後拋出的錯誤
+            // 使用者上鎖後拋出錯誤
+            if (locked) {                    
               req.authError = "密碼錯誤達五次，已上鎖"
               return cb(null, false)
             }
 
-            if (!res) {                      // 密碼錯誤拋出錯誤
+            // 密碼錯誤拋出錯誤
+            if (!res) {                      
               user.increment({ errCount: 1})
               req.authError = "密碼錯誤！"
               

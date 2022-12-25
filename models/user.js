@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     locked: DataTypes.BOOLEAN,
     overtime: DataTypes.INTEGER,
-    errCount: DataTypes.INTEGER
+    errCount: DataTypes.INTEGER,
+    isAdmin: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',
