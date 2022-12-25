@@ -13,7 +13,7 @@ router.post('/users/signin', passport.authenticate('local', { session: false, fa
 
 router.use('/attendant', attendant)
 
-router.use('/users', passport.authenticate('jwt', { session: false }), users)
+router.use('/current_user', passport.authenticate('jwt', { session: false }), users)
 
 router.use('/', (req, res) => res.redirect('/api/attendant'))
 

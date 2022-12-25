@@ -18,8 +18,7 @@ const userController = {
       req.user.update({
         errCount: 0
       })
-      console.log(userData)
-      // console.log(req)
+     
       const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' })
 
       res.status(200).json({
@@ -31,14 +30,18 @@ const userController = {
       next(err)
     }
   },
-  getUser: (req, res, next) => {
+  getCurrentUser: (req, res, next) => {
     console.log(req)
     return res.status(200).json({
+      id: req.user.id,
+      name: req.user.name,
       email: req.user.email,
+      image: req.user.image,
+      isAdmin: req.user.isAdmin
     })
 
   },
-  editUser: async (req, res, next) => {
+  editCurrentUser: async (req, res, next) => {
 
     try {
 
