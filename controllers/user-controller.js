@@ -31,7 +31,7 @@ const userController = {
     }
   },
   getCurrentUser: (req, res, next) => {
-    console.log(req)
+   
     return res.status(200).json({
       id: req.user.id,
       name: req.user.name,
@@ -75,6 +75,13 @@ const userController = {
         return res.status(401).json({
           status: 'error',
           message: '新密碼與確認密碼不相符，請重新輸入！'
+        })
+      }
+
+      if (newPassword.trim().length < 6 || newPassword.trim().length > 12) {
+        return res.status(401).json({
+          status: 'error',
+          message: '密碼長度需為6~12字元！'
         })
       }
 
