@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
+const bcrypt = require('bcryptjs')
 
 const adminController = {
   getUsers: (req, res, next) => {
@@ -20,7 +21,7 @@ const adminController = {
           name: user.name,
           email: user.email,
           locked: user.locked,
-          isAdmin: user.isAdmin 
+          isAdmin: user.isAdmin
         }))
 
         return res.status(200).json({
@@ -29,6 +30,27 @@ const adminController = {
         })
       })
       .catch(err => next(err))
+  },
+  userUnlock: async (req, res, next) => {
+    try{
+      const userId = req.params.id
+      console.log(userId)
+
+      const user = await User.findByPk(userId)
+
+      await user.update({
+        password: bcrypt.hashSync('titaner', bcrypt.genSaltSync(10), null),
+        locked: false
+      })
+
+      return res.status(200).json({
+        status: 'success',
+        message: '此帳號已解鎖'
+      })
+
+    } catch(err) {
+      next(err)
+    }
   }
 }
 
