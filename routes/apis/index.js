@@ -3,6 +3,7 @@ const router = express.Router()
 const passport = require('../../config/passport')
 
 const attendant = require('./modules/attendant')
+const admin = require('./modules/admin')
 const users = require('./modules/users')
 const userController = require('../../controllers/user-controller')
 const { authenticated } = require('../../middleware/auth')
@@ -14,6 +15,7 @@ router.post('/users/signin', passport.authenticate('local', { session: false, fa
 router.use('/attendant', attendant)
 
 router.use('/current_user', passport.authenticate('jwt', { session: false }), users)
+router.use('/admin', authenticated, admin)
 
 router.use('/', (req, res) => res.redirect('/api/attendant'))
 

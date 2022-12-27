@@ -15,7 +15,7 @@ const getPagination = (limit, page, total) => {
   }
 }
 
-exports.module = {
+module.exports = {
   getOffset,
   getPagination
 }
