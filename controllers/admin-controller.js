@@ -32,7 +32,7 @@ const adminController = {
       .catch(err => next(err))
   },
   userUnlock: async (req, res, next) => {
-    try{
+    try {
       const userId = req.params.id
       console.log(userId)
 
@@ -48,9 +48,36 @@ const adminController = {
         message: '此帳號已解鎖'
       })
 
-    } catch(err) {
+    } catch (err) {
       next(err)
     }
+  },
+  addUser: (req, res, next) => {
+    const name = req.body.name
+    const email = req.body.email
+
+    if (name.trim().length === 0 || email.trim().length === 0) {
+      return res.status(401).JSON({
+        status: 'error',
+        message: '請在欄位輸入資料'
+      })
+    }
+
+    User.creata({
+      name,
+      email,
+      password: bcrypt.hashSync('titaner', bcrypt.genSaltSync(10), null),
+      locked: false,
+      errCount: false,
+    })
+      .then(() => {
+        res.status(200).JSON({
+          status: 'success',
+          message: '新增成功'
+        })
+      })
+      .catch(err => next(err))
+
   }
 }
 
