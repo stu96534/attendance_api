@@ -52,26 +52,36 @@ const adminController = {
       next(err)
     }
   },
-  addUser: (req, res, next) => {
+  addUser: async (req, res, next) => {
     const name = req.body.name
     const email = req.body.email
-
+   
     if (name.trim().length === 0 || email.trim().length === 0) {
-      return res.status(401).JSON({
+      return res.status(401).json({
         status: 'error',
         message: '請在欄位輸入資料'
       })
     }
 
-    User.creata({
+   const enterEmail = await User.findOne({ where: { email } })
+
+   if(enterEmail) {
+    return res.status(401).json({
+      status: 'error',
+      message: '此信箱已被新增過'
+    })
+   }
+
+  await  User.create({
       name,
       email,
       password: bcrypt.hashSync('titaner', bcrypt.genSaltSync(10), null),
       locked: false,
       errCount: false,
+      isAdmin: false
     })
       .then(() => {
-        res.status(200).JSON({
+        res.status(200).json({
           status: 'success',
           message: '新增成功'
         })
