@@ -34,7 +34,6 @@ const adminController = {
   userUnlock: async (req, res, next) => {
     try {
       const userId = req.params.id
-      console.log(userId)
 
       const user = await User.findByPk(userId)
 

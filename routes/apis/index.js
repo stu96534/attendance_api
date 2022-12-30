@@ -12,9 +12,9 @@ const { authErrorHandler, apiErrorHandler } = require('../../middleware/error-ha
 
 router.post('/users/signin', passport.authenticate('local', { session: false, failWithError: true }), userController.signIn, authErrorHandler)
 
-router.use('/attendant', attendant)
-
 router.use('/current_user', passport.authenticate('jwt', { session: false }), users)
+
+router.use('/attendant', attendant)
 
 router.use('/admin', authenticated, admin)
 
