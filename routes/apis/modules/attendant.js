@@ -2,6 +2,6 @@ const express = require('express')
 const router = express.Router()
 const attController = require('../../../controllers/att-controller')
 
-router.get('/', attController.getAttendant)
+router.post('/:id', attController.addAttendant)
 
 module.exports = router

@@ -14,7 +14,7 @@ router.post('/users/signin', passport.authenticate('local', { session: false, fa
 
 router.use('/current_user', passport.authenticate('jwt', { session: false }), users)
 
-router.use('/attendant', attendant)
+router.use('/attendant', authenticated, attendant)
 
 router.use('/admin', authenticated, admin)
 
