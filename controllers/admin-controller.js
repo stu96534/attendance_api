@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Attendant } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 
@@ -54,7 +54,7 @@ const adminController = {
   addUser: async (req, res, next) => {
     const name = req.body.name
     const email = req.body.email
-   
+
     if (name.trim().length === 0 || email.trim().length === 0) {
       return res.status(401).json({
         status: 'error',
@@ -62,16 +62,16 @@ const adminController = {
       })
     }
 
-   const enterEmail = await User.findOne({ where: { email } })
+    const enterEmail = await User.findOne({ where: { email } })
 
-   if(enterEmail) {
-    return res.status(401).json({
-      status: 'error',
-      message: '此信箱已被新增過'
-    })
-   }
+    if (enterEmail) {
+      return res.status(401).json({
+        status: 'error',
+        message: '此信箱已被新增過'
+      })
+    }
 
-  await  User.create({
+    await User.create({
       name,
       email,
       password: bcrypt.hashSync('titaner', bcrypt.genSaltSync(10), null),
@@ -86,7 +86,32 @@ const adminController = {
         })
       })
       .catch(err => next(err))
+  },
+  getUserAttendant: async (req, res, next) => {
+try{
+    const UserId = req.params.id
+    const month = req.query.month
 
+    let attendants = await Attendant.findAll({
+      where: { UserId, month }
+    })
+
+    attendants = attendants.map(att => {
+      return {
+        date: att.date,
+        week: att.week,
+        checkIn: att.checkIn,
+        checkOut: att.checkOut,
+        description: att.description,
+        isHoliday: att.isHoliday,
+        isAbsense: att.isAbsense
+      }
+    })
+
+    return res.status(200).json(attendants)
+  } catch (err) {
+    next(err)
+  }
   }
 }
 
