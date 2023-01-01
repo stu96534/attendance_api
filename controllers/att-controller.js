@@ -10,6 +10,13 @@ const attController = {
       const date = req.body.date
       const UserId = req.params.id
 
+      if(UserId !== req.user.id) {
+        return res.status(401).json({
+          status: 'error',
+          message: '無法使用該帳號！'
+        })
+      }
+
       let attendant = await Attendant.findOne({
         where: {
           UserId,
