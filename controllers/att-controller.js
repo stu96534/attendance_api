@@ -9,8 +9,9 @@ const attController = {
     try {
       const date = req.body.date
       const UserId = req.params.id
+      const userId = req.user.id
 
-      if(UserId !== req.user.id) {
+      if (Number(UserId) !== Number(userId)) {
         return res.status(401).json({
           status: 'error',
           message: '無法使用該帳號！'
