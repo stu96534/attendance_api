@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   Attendant.init({
     date: DataTypes.STRING,
     week: DataTypes.STRING,
-    checkIn: DataTypes.STRING,
-    checkOut: DataTypes.STRING,
+    checkIn: DataTypes.BIGINT,
+    checkOut: DataTypes.BIGINT,
     description: DataTypes.STRING,
     isHoliday: DataTypes.BOOLEAN,
     isAbsense: DataTypes.BOOLEAN,

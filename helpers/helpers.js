@@ -1,3 +1,9 @@
+function dateStr(str) {
+  const date = str.slice(0, 4) + '/' + str.slice(4, 6) + '/' + str.slice(6)
+
+  return date
+}
+
 //為配合GMT+8時區的早上5點為換日時間，將時區變為GMT+3
 function GMT_3(date) {
   const formatting =
@@ -16,5 +22,6 @@ function GMT_3(date) {
 
 
 module.exports = {
+  dateStr,
   GMT_3
 }

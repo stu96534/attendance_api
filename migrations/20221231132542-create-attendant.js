@@ -15,10 +15,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       check_in: {
-        type: Sequelize.STRING
+        type: Sequelize.BIGINT
       },
       check_out: {
-        type: Sequelize.STRING
+        type: Sequelize.BIGINT
       },
       description: {
         type: Sequelize.STRING

@@ -1,7 +1,5 @@
 const { Attendant } = require('../models')
 const { GMT_3 } = require('../helpers/helpers')
-const date2023 = require('../config/2023.json')
-
 
 
 const attController = {
@@ -25,11 +23,11 @@ const attController = {
         }
       })
 
-
       if (!attendant.checkIn) {
         //上班打卡
         await attendant.update({
-          checkIn: date
+          checkIn: date,
+          isAbsense: true
         })
 
         return res.status(200).json({
