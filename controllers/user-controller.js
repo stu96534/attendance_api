@@ -111,8 +111,6 @@ const userController = {
       const user = await User.findByPk(userId)
       
     if (distance !== isDistance) {
-      console.log(789)
-      console.log(isDistance)
       await user.update({
         isDistance
       })
@@ -125,7 +123,6 @@ const userController = {
     } catch (err) {
       next(err)
     }
-    
   }
 
 }
