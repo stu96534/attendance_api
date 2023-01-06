@@ -26,9 +26,6 @@ module.exports = {
       locked: {
         type: Sequelize.BOOLEAN
       },
-      overtime: {
-        type: Sequelize.INTEGER
-      },
       err_count: {
         type: Sequelize.INTEGER
       },

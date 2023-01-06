@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.INTEGER,
     image: DataTypes.STRING,
     locked: DataTypes.BOOLEAN,
-    overtime: DataTypes.INTEGER,
     errCount: DataTypes.INTEGER,
-    isAdmin: DataTypes.BOOLEAN
+    isAdmin: DataTypes.BOOLEAN,
+    isDistance: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',

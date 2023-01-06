@@ -91,18 +91,35 @@ const userController = {
         password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10), null)
       })
 
-
       return res.status(200).json({
         status: 'success',
         message: '密碼更新成功！'
       })
 
     } catch (error) {
-
       next(error)
-
     }
+  },
+  putDistance: async (req, res, next) => {
 
+    try {
+      const { isDistance } = req.body
+      const userId = req.user.id
+      const user = await User.findByPk(userId)
+    
+      await user.update({
+        isDistance
+      })
+
+      return res.status(200).json({
+        status: 'success',
+        message: '此範圍可進行打卡！'
+      })
+
+    } catch (err) {
+      next(err)
+    }
+    
   }
 
 }

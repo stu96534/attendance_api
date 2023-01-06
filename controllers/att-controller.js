@@ -62,7 +62,6 @@ const attController = {
     } catch (error) {
       next(error)
     }
-
   }
 }
 
