@@ -31,13 +31,16 @@ const userController = {
     }
   },
   getCurrentUser: (req, res, next) => {
+
+    const { id, name, email, image, isAdmin, isDistance } = req.user
    
     return res.status(200).json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email,
-      image: req.user.image,
-      isAdmin: req.user.isAdmin
+      id,
+      name,
+      email,
+      image,
+      isAdmin,
+      isDistance
     })
 
   },
@@ -101,19 +104,20 @@ const userController = {
     }
   },
   putDistance: async (req, res, next) => {
-
     try {
       const { isDistance } = req.body
       const userId = req.user.id
+      const distance = req.user.isDistance
       const user = await User.findByPk(userId)
-    
+      
+    if (distance !== isDistance) {
       await user.update({
         isDistance
       })
-
+    }
+      
       return res.status(200).json({
-        status: 'success',
-        message: '此範圍可進行打卡！'
+        status: 'success'
       })
 
     } catch (err) {
