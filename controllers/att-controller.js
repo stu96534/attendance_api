@@ -1,4 +1,4 @@
-const { Attendant } = require('../models')
+const { Attendant, Location } = require('../models')
 const { GMT_3 } = require('../helpers/helpers')
 
 
@@ -61,6 +61,20 @@ const attController = {
       }
     } catch (error) {
       next(error)
+    }
+  },
+  getLocation: async (req, res, next) => {
+    try {
+
+      let location = await Location.findOne({
+        where: { isChoose: true }
+      })
+
+      return res.status(200).json(location)
+
+
+    } catch(err) {
+      next(err)
     }
   }
 }

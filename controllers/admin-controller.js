@@ -1,4 +1,4 @@
-const { User, Attendant } = require('../models')
+const { User, Attendant, Location } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 const { dateStr } = require('../helpers/helpers')
@@ -138,6 +138,47 @@ const adminController = {
       })
 
       return res.status(200).json(attendants)
+    } catch (err) {
+      next(err)
+    }
+  },
+  changeLocation: async (req, res, next) => {
+    try {
+      const { name } = req.body
+
+      let changeLocation = await Location.findOne({
+        where: { isChoose: true }
+      })
+
+      let location = await Location.findOne({
+        where: { name }
+      })
+
+      if (!location) {
+        return res.status(401).json({
+          status: 'error',
+          message: '無此地點'
+        })
+      }
+
+      if (changeLocation.name === name) {
+        return res.status(401).json({
+          status: 'error',
+          message: '已經選此地點'
+        })
+      }
+
+      await changeLocation.update({
+        isChoose: false
+      })
+
+      await location.update({
+        isChoose: true
+      })
+      
+      return res.status(200).json({
+        status: 'success'
+      })
     } catch (err) {
       next(err)
     }
