@@ -133,7 +133,8 @@ const adminController = {
           checkOut: att.checkOut,
           description: att.description,
           isHoliday: att.isHoliday,
-          isAbsense: att.isAbsense
+          isAbsense: att.isAbsense,
+          isAttendant: att.isAttendant
         }
       })
 

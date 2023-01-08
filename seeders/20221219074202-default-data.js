@@ -13,7 +13,6 @@ module.exports = {
       locked: false,
       err_count: 0,
       is_admin: true,
-      is_distance: false,
       created_at: new Date(),
       updated_at: new Date()
 

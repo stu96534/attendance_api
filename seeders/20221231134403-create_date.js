@@ -27,6 +27,7 @@ module.exports = {
       description: Str2023[i - (Math.floor(i / 365) * 365)].description,
       is_holiday: Str2023[i - (Math.floor(i / 365) * 365)].is_holiday,
       is_absense: false,
+      is_attendant: false,
       created_at: new Date(),
       updated_at: new Date()
     })

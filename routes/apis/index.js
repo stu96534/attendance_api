@@ -6,6 +6,7 @@ const attendant = require('./modules/attendant')
 const admin = require('./modules/admin')
 const users = require('./modules/users')
 const userController = require('../../controllers/user-controller')
+const attController = require('../../controllers/att-controller')
 const { authenticated } = require('../../middleware/auth')
 const { authErrorHandler, apiErrorHandler } = require('../../middleware/error-handler')
 
@@ -14,12 +15,14 @@ router.post('/users/signin', passport.authenticate('local', { session: false, fa
 
 router.use('/current_user', passport.authenticate('jwt', { session: false }), users)
 
+router.get('/location', attController.getLocation)
+
 router.use('/attendant', authenticated, attendant)
 
 router.use('/admin', authenticated, admin)
 
 router.use('/', (req, res) => res.redirect('/api/attendant'))
 
-router.use('/', apiErrorHandler )
+router.use('/', apiErrorHandler)
 
 module.exports = router

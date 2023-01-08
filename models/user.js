@@ -21,8 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     locked: DataTypes.BOOLEAN,
     errCount: DataTypes.INTEGER,
-    isAdmin: DataTypes.BOOLEAN,
-    isDistance: DataTypes.BOOLEAN
+    isAdmin: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',

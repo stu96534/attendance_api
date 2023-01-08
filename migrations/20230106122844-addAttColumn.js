@@ -2,15 +2,15 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn('Users',
-      'is_distance',
+    await queryInterface.addColumn('Attendants',
+      'is_attendant',
       {
         type: Sequelize.BOOLEAN
       })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Users',
-      'is_distance')
+    await queryInterface.removeColumn('Attendants',
+      'is_attendant')
   }
 };

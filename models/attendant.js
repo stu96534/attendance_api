@@ -22,12 +22,13 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     isHoliday: DataTypes.BOOLEAN,
     isAbsense: DataTypes.BOOLEAN,
+    isAttendant: DataTypes.BOOLEAN,
     month: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Attendant',
-    tableName: 'AttendantS',
+    tableName: 'Attendants',
     underscored: true,
   });
   return Attendant;

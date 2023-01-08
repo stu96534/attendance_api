@@ -46,11 +46,13 @@ const attController = {
 
         if (workHours < 8 && !attendant.isHoliday) {
           await attendant.update({
-            isAbsense: true
+            isAbsense: true,
+            isAttendant: false
           })
         } else {
           await attendant.update({
-            isAbsense: false
+            isAbsense: false,
+            isAttendant: true
           })
         }
 
