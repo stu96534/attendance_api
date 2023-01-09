@@ -102,29 +102,7 @@ const userController = {
     } catch (error) {
       next(error)
     }
-  },
-  putDistance: async (req, res, next) => {
-    try {
-      const { isDistance } = req.body
-      const userId = req.user.id
-      const distance = req.user.isDistance
-      const user = await User.findByPk(userId)
-      
-    if (distance !== isDistance) {
-      await user.update({
-        isDistance
-      })
-    }
-      
-      return res.status(200).json({
-        status: 'success'
-      })
-
-    } catch (err) {
-      next(err)
-    }
   }
-
 }
 
 module.exports = userController
