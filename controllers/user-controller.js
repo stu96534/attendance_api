@@ -39,8 +39,7 @@ const userController = {
       name,
       email,
       image,
-      isAdmin,
-      isDistance
+      isAdmin
     })
 
   },
