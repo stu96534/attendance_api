@@ -26,7 +26,6 @@ module.exports = {
       locked: false,
       err_count: 0,
       is_admin: false,
-      is_distance: false,
       created_at: new Date(),
       updated_at: new Date()
 

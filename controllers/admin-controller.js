@@ -2,6 +2,8 @@ const { User, Attendant, Location } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 const { dateStr } = require('../helpers/helpers')
+
+//2023行事曆
 const date2023 = require('../config/2023.json')
 const Str2023 = date2023.map(d => ({
   date: dateStr(d.date),
@@ -14,11 +16,13 @@ const Str2023 = date2023.map(d => ({
 
 const adminController = {
   getUsers: (req, res, next) => {
+    //頁碼
     const DEFAULT_LIMIT = 10
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
     const offset = getOffset(limit, page)
 
+    //員工列表
     User.findAndCountAll({
       limit,
       offset,
@@ -121,12 +125,23 @@ const adminController = {
       const UserId = req.params.id
       const month = req.query.month
 
-      let attendants = await Attendant.findAll({
-        where: { UserId, month }
+      //頁碼
+      const DEFAULT_LIMIT = 11
+      const page = Number(req.query.page) || 1
+      const limit = Number(req.query.limit) || DEFAULT_LIMIT
+      const offset = getOffset(limit, page)
+      
+      let attendants = await Attendant.findAndCountAll({
+        where: { UserId, month },
+        limit,
+        offset,
+        nest: true,
+        raw: true
       })
 
-      attendants = attendants.map(att => {
+    let data = attendants.rows.map(att => {
         return {
+          id: att.id,
           date: att.date,
           week: att.week,
           checkIn: att.checkIn,
@@ -138,7 +153,11 @@ const adminController = {
         }
       })
 
-      return res.status(200).json(attendants)
+      return res.status(200).json({
+        attendants: data,
+        month,
+        pagination: getPagination(limit, page, attendants.count)
+      })
     } catch (err) {
       next(err)
     }
@@ -177,6 +196,31 @@ const adminController = {
         isChoose: true
       })
       
+      return res.status(200).json({
+        status: 'success'
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+  changeAttendant: async (req, res, next) => {
+    try {
+      const { id } = req.body
+
+      let attendants = await Attendant.findByPk(id)
+
+      if (!attendants) {
+        return res.status(401).json({
+          status: 'error',
+          message: '無法操作此項目'
+        })
+      }
+
+      await attendants.update({
+        isAbsense: false,
+        isAttendant:true
+      })
+
       return res.status(200).json({
         status: 'success'
       })

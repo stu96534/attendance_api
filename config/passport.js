@@ -30,7 +30,7 @@ passport.use(new LocalStrategy(
             const locked = user.toJSON().locked
 
             // 密碼錯誤5次上鎖
-            if (errCount >= 5) { 
+            if (errCount === 5) { 
               if (user.isAdmin) {
                 // 管理者密碼錯誤達五次，恢復成預設密碼
                 user.update({
@@ -46,6 +46,8 @@ passport.use(new LocalStrategy(
                   locked: true,
                   errCount: 0
                 })
+                req.authError = "密碼錯誤達五次，已上鎖"
+                return cb(null, false)
               }            
               
             }
