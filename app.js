@@ -12,7 +12,8 @@ const app = express()
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://attendance-management-tau.vercel.app'
+    'https://attendance-management-tau.vercel.app',
+    'https://attendance-management-stu96534.vercel.app'
   ],
   methods: [
     'GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH', 'OPTIONS'
