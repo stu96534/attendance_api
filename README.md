@@ -1,6 +1,7 @@
 # 鈦坦出勤
 以前後端分離方式打造出勤打卡功能，此為後端專案。
-部屬網站為heroku
+- 部屬網站為heroku
+- 前端專案連結：https://github.com/stu96534/attendance_front
 
 ## 功能介紹
 ### 一般使用者
