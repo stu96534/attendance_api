@@ -1,18 +1,11 @@
 const { User, Attendant, Location } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
-const { dateStr } = require('../helpers/helpers')
+const { yearStr, fullYearDay } = require('../helpers/helpers')
 
 //2023行事曆
 const date2023 = require('../config/2023.json')
-const Str2023 = date2023.map(d => ({
-  date: dateStr(d.date),
-  week: d.week,
-  description: d.description,
-  is_holiday: d.isHoliday,
-  month: new Date(dateStr(d.date)).getMonth() + 1,
-  is_absense: false
-}))
+const Str2023 = yearStr(date2023)
 
 const adminController = {
   getUsers: (req, res, next) => {
@@ -106,20 +99,10 @@ const adminController = {
         isAdmin: false
       })
 
-      const fullYearDay = Array.from({ length: date2023.length }).map((_, i) => ({
-        UserId: Number(createUser.id),
-        date: Str2023[i].date,
-        month: Str2023[i].month,
-        week: Str2023[i].week,
-        description: Str2023[i].description,
-        isHoliday: Str2023[i].is_holiday,
-        isAbsense: false,
-        created_at: new Date(),
-        updated_at: new Date()
-      }))
+      const calendar = fullYearDay(createUser,Str2023)
 
-      fullYearDay.map(attendant => {
-        Attendant.create(attendant)
+      calendar.map( async (attendant) => {
+       await Attendant.create(attendant)
       })
 
       return res.status(200).json({
