@@ -68,6 +68,7 @@ const adminController = {
   addUser: async (req, res, next) => {
     try {
       const name = req.body.name
+      const account = req.body.account
       const email = req.body.email
 
       if (name.trim().length === 0 || email.trim().length === 0) {
@@ -77,7 +78,16 @@ const adminController = {
         })
       }
 
+      const enterAccount = await User.findOne({ where: { account } })
+
       const enterEmail = await User.findOne({ where: { email } })
+
+      if (enterAccount) {
+        return res.status(401).json({
+          status: 'error',
+          message: '此帳號已被新增過'
+        })
+      }
 
       if (enterEmail) {
         return res.status(401).json({
@@ -88,6 +98,7 @@ const adminController = {
 
       const createUser = await User.create({
         name,
+        account,
         email,
         password: bcrypt.hashSync('titaner', bcrypt.genSaltSync(10), null),
         locked: false,
