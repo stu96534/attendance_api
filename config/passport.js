@@ -11,13 +11,13 @@ const ExtractJWT = passportJWT.ExtractJwt
 
 passport.use(new LocalStrategy(
   {
-    usernameField: 'email',
+    usernameField: 'account',
     passwordField: 'password',
     passReqToCallback: true
   },
 
-  (req, email, password, cb) => {
-    User.findOne({ where: { email } })
+  (req, account, password, cb) => {
+    User.findOne({ where: { account } })
       .then(user => {
         if (!user) {
           req.authError = "此帳號不存在！"
@@ -46,7 +46,7 @@ passport.use(new LocalStrategy(
                   locked: true,
                   errCount: 0
                 })
-                req.authError = "密碼錯誤達五次，已上鎖"
+                req.authError = "密碼錯誤達五次，已上鎖，請洽管理者解鎖"
                 return cb(null, false)
               }            
               

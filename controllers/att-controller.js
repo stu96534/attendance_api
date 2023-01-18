@@ -7,6 +7,7 @@ const attController = {
   addAttendant: async (req, res, next) => {
     try {
       const date = req.body.date
+      const distance = req.body.distance
       const UserId = req.params.id
       const userId = req.user.id
 
@@ -14,6 +15,13 @@ const attController = {
         return res.status(401).json({
           status: 'error',
           message: '無法使用該帳號！'
+        })
+      }
+
+      if (distance > 400) {
+        return res.status(401).json({
+          status: 'error',
+          message: `目前離公司${distance}公尺，無法打卡`
         })
       }
 
@@ -73,7 +81,6 @@ const attController = {
       })
 
       return res.status(200).json(location)
-
 
     } catch(err) {
       next(err)
