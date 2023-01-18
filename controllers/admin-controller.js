@@ -64,7 +64,7 @@ const adminController = {
       const account = req.body.account
       const email = req.body.email
 
-      if (name.trim().length === 0 || email.trim().length === 0) {
+      if ((name.trim().length === 0 || email.trim().length === 0) || account.trim().length === 0) {
         return res.status(401).json({
           status: 'error',
           message: '請在欄位輸入資料'
