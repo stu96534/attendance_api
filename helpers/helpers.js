@@ -6,7 +6,7 @@ function dateStr(str) {
 }
 
 //年度行事曆轉換
-function yearStr(year) {
+function calendarTransformOwnData(year) {
   return year.map(d => ({
     date: dateStr(d.date),
     week: d.week,
@@ -34,14 +34,14 @@ function GMT_3(date) {
 }
 
 //年度行事曆轉換出勤紀錄資訊
-function fullYearDay(createUser, yearStr) {
-  const fullYearDay =  Array.from({ length: yearStr.length }).map((_, i) => ({
+function fullYearDay(createUser, calendarTransformOwnData) {
+  const fullYearDay =  Array.from({ length: calendarTransformOwnData.length }).map((_, i) => ({
     UserId: Number(createUser.id),
-    date: yearStr[i].date,
-    month: yearStr[i].month,
-    week: yearStr[i].week,
-    description: yearStr[i].description,
-    isHoliday: yearStr[i].is_holiday,
+    date: calendarTransformOwnData[i].date,
+    month: calendarTransformOwnData[i].month,
+    week: calendarTransformOwnData[i].week,
+    description: calendarTransformOwnData[i].description,
+    isHoliday: calendarTransformOwnData[i].is_holiday,
     isAbsense: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -53,7 +53,7 @@ function fullYearDay(createUser, yearStr) {
 
 module.exports = {
   dateStr,
-  yearStr,
+  calendarTransformOwnData,
   fullYearDay,
   GMT_3
 }
