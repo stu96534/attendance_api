@@ -8,12 +8,7 @@ const userController = {
       const userData = req.user.toJSON()
       delete userData.password
      
-      if (userData.locked) {
-        return res.status(401).json({
-          status: 'error',
-          message: '密碼錯誤達五次，已上鎖'
-        })
-      }
+      if (userData.locked) throw new Error('密碼錯誤達五次，已上鎖') 
 
       req.user.update({
         errCount: 0
@@ -52,40 +47,15 @@ const userController = {
       const { email, password, newPassword, checkPassword } = req.body
       const { email: currentEmail, password: currentPassword } = req.user
 
-      if (Number(id) !== Number(userId)) {
-        return res.status(401).json({
-          status: 'error',
-          message: '無法編輯此用戶！'
-        })
-      }
+      if (Number(id) !== Number(userId)) throw new Error('無法編輯此用戶！')
 
-      if (email !== currentEmail) {
-        return res.status(401).json({
-          status: 'error',
-          message: '帳號錯誤，請重新輸入！'
-        })
-      }
+      if (email !== currentEmail) throw new Error('帳號錯誤，請重新輸入！')
 
-      if (!bcrypt.compareSync(password, currentPassword)) {
-        return res.status(401).json({
-          status: 'error',
-          message: '原密碼錯誤，請重新輸入！'
-        })
-      }
+      if (!bcrypt.compareSync(password, currentPassword)) throw new Error('原密碼錯誤，請重新輸入！')
 
-      if (newPassword !== checkPassword) {
-        return res.status(401).json({
-          status: 'error',
-          message: '新密碼與確認密碼不相符，請重新輸入！'
-        })
-      }
+      if (newPassword !== checkPassword) throw new Error('新密碼與確認密碼不相符，請重新輸入！')
 
-      if (newPassword.trim().length < 6 || newPassword.trim().length > 12) {
-        return res.status(401).json({
-          status: 'error',
-          message: '密碼長度需為6~12字元！'
-        })
-      }
+      if (newPassword.trim().length < 6 || newPassword.trim().length > 12) throw new Error('密碼長度需為6~12字元！')
 
       const user = await User.findByPk(userId)
 
