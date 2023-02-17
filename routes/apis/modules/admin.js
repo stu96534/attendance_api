@@ -5,7 +5,6 @@ const adminController = require('../../../controllers/admin-controller')
 router.get('/users/:id/attendant', adminController.getUserAttendant)
 router.put('/users/:id/unlock', adminController.userUnlock)
 router.put('/changeAttendant', adminController.changeAttendant)
-router.put('/location', adminController.changeLocation)
 router.get('/users', adminController.getUsers)
 router.post('/users', adminController.addUser)
 
