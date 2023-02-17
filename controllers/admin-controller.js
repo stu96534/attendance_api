@@ -64,30 +64,15 @@ const adminController = {
       const account = req.body.account
       const email = req.body.email
 
-      if ((name.trim().length === 0 || email.trim().length === 0) || account.trim().length === 0) {
-        return res.status(401).json({
-          status: 'error',
-          message: '請在欄位輸入資料'
-        })
-      }
+      if ((name.trim().length === 0 || email.trim().length === 0) || account.trim().length === 0) throw new Error('請在欄位輸入資料') 
 
       const enterAccount = await User.findOne({ where: { account } })
 
       const enterEmail = await User.findOne({ where: { email } })
 
-      if (enterAccount) {
-        return res.status(401).json({
-          status: 'error',
-          message: '此帳號已被新增過'
-        })
-      }
+      if (enterAccount) throw new Error('此帳號已被新增過')
 
-      if (enterEmail) {
-        return res.status(401).json({
-          status: 'error',
-          message: '此信箱已被新增過'
-        })
-      }
+      if (enterEmail) throw new Error('此信箱已被新增過') 
 
       const createUser = await User.create({
         name,
@@ -168,19 +153,9 @@ const adminController = {
         where: { name }
       })
 
-      if (!location) {
-        return res.status(401).json({
-          status: 'error',
-          message: '無此地點'
-        })
-      }
+      if (!location) throw new Error('無此地點') 
 
-      if (changeLocation.name === name) {
-        return res.status(401).json({
-          status: 'error',
-          message: '已經選此地點'
-        })
-      }
+      if (changeLocation.name === name) throw new Error('已經選此地點')
 
       await changeLocation.update({
         isChoose: false
@@ -203,12 +178,7 @@ const adminController = {
 
       let attendants = await Attendant.findByPk(id)
 
-      if (!attendants) {
-        return res.status(401).json({
-          status: 'error',
-          message: '無法操作此項目'
-        })
-      }
+      if (!attendants) throw new Error('無法操作此項目') 
 
       await attendants.update({
         isAbsense: false,
