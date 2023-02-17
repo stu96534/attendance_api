@@ -50,10 +50,15 @@ function fullYearDay(createUser, calendarTransformOwnData) {
   return fullYearDay
 }
 
+function timestampTransformHours(checkInTimestamp, checkOutTimestamp) {
+  return parseInt(parseInt(checkOutTimestamp - checkInTimestamp) / 1000 / 60 / 60)
+}
+
 
 module.exports = {
   dateStr,
   calendarTransformOwnData,
   fullYearDay,
-  GMT_3
+  GMT_3,
+  timestampTransformHours
 }

@@ -141,37 +141,6 @@ const adminController = {
       next(err)
     }
   },
-  changeLocation: async (req, res, next) => {
-    try {
-      const { name } = req.body
-
-      let changeLocation = await Location.findOne({
-        where: { isChoose: true }
-      })
-
-      let location = await Location.findOne({
-        where: { name }
-      })
-
-      if (!location) throw new Error('無此地點') 
-
-      if (changeLocation.name === name) throw new Error('已經選此地點')
-
-      await changeLocation.update({
-        isChoose: false
-      })
-
-      await location.update({
-        isChoose: true
-      })
-      
-      return res.status(200).json({
-        status: 'success'
-      })
-    } catch (err) {
-      next(err)
-    }
-  },
   changeAttendant: async (req, res, next) => {
     try {
       const { id } = req.body
