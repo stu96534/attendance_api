@@ -1,7 +1,7 @@
 const { User, Attendant, Location } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
-const { calendarTransformOwnData, fullYearDay } = require('../helpers/helpers')
+const { calendarTransformOwnData, getCalendarOfYear } = require('../helpers/helpers')
 
 //2023行事曆
 const date2023 = require('../config/2023.json')
@@ -84,7 +84,7 @@ const adminController = {
         isAdmin: false
       })
 
-      const calendar = fullYearDay(createUser,calendar2023)
+      const calendar = getCalendarOfYear(createUser,calendar2023)
 
       calendar.map( async (attendant) => {
        await Attendant.create(attendant)

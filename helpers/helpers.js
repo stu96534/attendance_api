@@ -34,8 +34,8 @@ function GMT_3(date) {
 }
 
 //年度行事曆轉換出勤紀錄資訊
-function fullYearDay(createUser, calendarTransformOwnData) {
-  const fullYearDay =  Array.from({ length: calendarTransformOwnData.length }).map((_, i) => ({
+function getCalendarOfYear(createUser, calendarTransformOwnData) {
+  const getCalendarOfYear =  Array.from({ length: calendarTransformOwnData.length }).map((_, i) => ({
     UserId: Number(createUser.id),
     date: calendarTransformOwnData[i].date,
     month: calendarTransformOwnData[i].month,
@@ -47,7 +47,7 @@ function fullYearDay(createUser, calendarTransformOwnData) {
     updated_at: new Date()
   }))
 
-  return fullYearDay
+  return getCalendarOfYear
 }
 
 function timestampTransformHours(checkInTimestamp, checkOutTimestamp) {
@@ -58,7 +58,7 @@ function timestampTransformHours(checkInTimestamp, checkOutTimestamp) {
 module.exports = {
   dateStr,
   calendarTransformOwnData,
-  fullYearDay,
+  getCalendarOfYear,
   GMT_3,
   timestampTransformHours
 }

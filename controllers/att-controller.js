@@ -1,4 +1,4 @@
-const { Attendant, Location } = require('../models')
+const { Attendant } = require('../models')
 const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
 
 
@@ -6,7 +6,7 @@ const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
 const attController = {
   addAttendant: async (req, res, next) => {
     try {
-      const date = req.body.date
+      const { date } = req.body
       const UserId = req.params.id
       const userId = req.user.id
 
