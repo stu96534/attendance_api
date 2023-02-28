@@ -1,5 +1,6 @@
 const { Attendant } = require('../models')
 const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
+const ApiError = require('../middleware/apiError')
 
 
 
@@ -10,7 +11,7 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      if (Number(UserId) !== Number(userId)) throw new Error('無法使用該帳號！')
+      if (Number(UserId) !== Number(userId)) throw new ApiError('無法使用該帳號！', 401)
 
 
       let attendant = await Attendant.findOne({

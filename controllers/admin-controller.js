@@ -1,7 +1,8 @@
-const { User, Attendant, Location } = require('../models')
+const { User, Attendant } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 const { calendarTransformOwnData, getCalendarOfYear } = require('../helpers/helpers')
+const ApiError = require('../middleware/apiError')
 
 //2023行事曆
 const date2023 = require('../config/2023.json')
@@ -64,15 +65,15 @@ const adminController = {
       const account = req.body.account
       const email = req.body.email
 
-      if ((name.trim().length === 0 || email.trim().length === 0) || account.trim().length === 0) throw new Error('請在欄位輸入資料') 
+      if ((name.trim().length === 0 || email.trim().length === 0) || account.trim().length === 0) throw new ApiError('請在欄位輸入資料', 401) 
 
       const enterAccount = await User.findOne({ where: { account } })
 
       const enterEmail = await User.findOne({ where: { email } })
 
-      if (enterAccount) throw new Error('此帳號已被新增過')
+      if (enterAccount) throw new ApiError('此帳號已被新增過', 401)
 
-      if (enterEmail) throw new Error('此信箱已被新增過') 
+      if (enterEmail) throw new ApiError('此信箱已被新增過', 401) 
 
       const createUser = await User.create({
         name,
@@ -147,7 +148,7 @@ const adminController = {
 
       let attendants = await Attendant.findByPk(id)
 
-      if (!attendants) throw new Error('無法操作此項目') 
+      if (!attendants) throw new ApiError('無法操作此項目', 401) 
 
       await attendants.update({
         isAbsense: false,
