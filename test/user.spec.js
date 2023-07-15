@@ -7,7 +7,7 @@ const should = chai.should()
 const expect = chai.expect;
 const db = require('../models')
 const passport = require('../config/passport');
-const { before, it, after } = require('node:test');
+// const { before, it, after } = require('node:test');
 
 describe('# current_user', () => {
 
@@ -34,11 +34,18 @@ describe('# current_user', () => {
         .expect(200)
         .end(function(err, res) {
           if (err) return done(err)
+          res.body.name.should.equal('admin');
+
+          return done()
         })
       })
 
       after(async () => {
-
+        // 清除登入及測試資料庫資料
+        this.authenticate.restore();
+        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true });
+        await db.User.destroy({where: {},truncate: true, force: true})
+        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, { raw: true });
       })
     })
   })

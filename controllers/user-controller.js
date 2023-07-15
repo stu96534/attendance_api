@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
-const ApiError = require('../middleware/apiError')
+const errStrategies = require('../middleware/apiError')
+const { isNotPair } = require('../middleware/funcTools')
 
 const userController = {
   signIn: (req, res, next) => {
@@ -9,7 +10,7 @@ const userController = {
       const userData = req.user.toJSON()
       delete userData.password
      
-      if (userData.locked) throw new ApiError('密碼錯誤達五次，已上鎖', 401) 
+      errStrategies.isErrMsg(userData.locked, '密碼錯誤達五次，已上鎖', 401)
 
       req.user.update({
         errCount: 0
@@ -48,15 +49,17 @@ const userController = {
       const { email, password, newPassword, checkPassword } = req.body
       const { email: currentEmail, password: currentPassword } = req.user
 
-      if (Number(id) !== Number(userId)) throw new ApiError('無法編輯此用戶！', 401)
+      errStrategies.errorMsg(isNotPair(Number(id), Number(userId)), '無法編輯此用戶！', 403)
 
-      if (email !== currentEmail) throw new ApiError('帳號錯誤，請重新輸入！', 401)
+      errStrategies.errorMsg(isNotPair(email, currentEmail), '帳號錯誤，請重新輸入！', 401)
 
-      if (!bcrypt.compareSync(password, currentPassword)) throw new ApiError('原密碼錯誤，請重新輸入！', 401)
+      errStrategies.errorMsg(isNotPair(newPassword, checkPassword), '新密碼與確認密碼不相符，請重新輸入！', 401)
 
-      if (newPassword !== checkPassword) throw new ApiError('新密碼與確認密碼不相符，請重新輸入！', 401)
+      errStrategies.errorMsg(!bcrypt.compareSync(password, currentPassword), '新密碼與確認密碼不相符，請重新輸入！', 401)
 
-      if (newPassword.trim().length < 6 || newPassword.trim().length > 12) throw new ApiError('密碼長度需為6~12字元！', 401)
+      errStrategies.minLength(newPassword, 6, '密碼長度需為6~12字元！')
+
+      errStrategies.maxLength(newPassword, 12, '密碼長度需為6~12字元！')
 
       const user = await User.findByPk(userId)
 

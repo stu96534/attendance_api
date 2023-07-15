@@ -1,6 +1,7 @@
 const { Attendant } = require('../models')
 const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
-const ApiError = require('../middleware/apiError')
+const errStrategies = require('../middleware/apiError')
+const { isNotPair } = require('../middleware/funcTools')
 
 
 
@@ -11,7 +12,7 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      if (Number(UserId) !== Number(userId)) throw new ApiError('無法使用該帳號！', 401)
+      errStrategies.errorMsg(isNotPair(Number(id), Number(userId)), '無法編輯此用戶！', 403)
 
 
       let attendant = await Attendant.findOne({
