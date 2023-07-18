@@ -12,6 +12,31 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
+      errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
+
+      //上班打卡
+      await Attendant.create({
+        checkIn: date,
+        date: GMT_3(date),
+        isAbsense: true,
+        userId
+      })
+
+      return res.status(200).json({
+        status: 'success',
+        message: '上班打卡成功'
+      })
+
+    } catch (error) {
+      next(error)
+    }
+  },
+  putAttendant: async (req, res, next) => {
+    try {
+      const { date } = req.body
+      const UserId = req.params.id
+      const userId = req.user.id
+
       errStrategies.errorMsg(isNotPair(Number(id), Number(userId)), '無法編輯此用戶！', 403)
 
 

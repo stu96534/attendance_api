@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Location extends Model {
+  class year2023 extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,18 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      
     }
   };
-  Location.init({
-    name: DataTypes.STRING,
-    latitube: DataTypes.DOUBLE,
-    longitube: DataTypes.DOUBLE,
-    isChoose: DataTypes.BOOLEAN
+  year2023.init({
+    date: DataTypes.STRING,
+    week: DataTypes.STRING,
+    isHoliday: DataTypes.BOOLEAN,
+    description: DataTypes.STRING,
+    month: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'Location',
-    tableName: 'Locations',
-    underscored: true,
+    modelName: 'year2023',
+    tableName: 'year2023s',
+    underscored: true
   });
-  return Location;
+  return year2023;
 };

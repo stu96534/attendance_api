@@ -1,24 +1,28 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Locations', {
+    await queryInterface.createTable('year2023s', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      date: {
         type: Sequelize.STRING
       },
-      latitube: {
-        type: Sequelize.DOUBLE
+      week: {
+        type: Sequelize.STRING
       },
-      longitube: {
-        type: Sequelize.DOUBLE
-      },
-      is_choose: {
+      is_holiday: {
         type: Sequelize.BOOLEAN
+      },
+      description: {
+        type: Sequelize.STRING
+      },
+      month: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -31,6 +35,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Locations');
+    await queryInterface.dropTable('year2023s');
   }
 };
