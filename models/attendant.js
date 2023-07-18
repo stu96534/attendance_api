@@ -12,19 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Attendant.belongsTo(models.User, { foreignKey: "UserId" })
+      Attendant.belongsTo(models.year2023, { foreignKey: "DateId" })
     }
   };
   Attendant.init({
-    date: DataTypes.STRING,
-    week: DataTypes.STRING,
     checkIn: DataTypes.BIGINT,
     checkOut: DataTypes.BIGINT,
-    description: DataTypes.STRING,
-    isHoliday: DataTypes.BOOLEAN,
     isAbsense: DataTypes.BOOLEAN,
     isAttendant: DataTypes.BOOLEAN,
-    month: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    DateId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Attendant',
