@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class year2023 extends Model {
+  class Calendar extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      
+      Calendar.hasMany(models.Attendant, { foreignKey: "CalendarId" })
     }
   };
-  year2023.init({
+  Calendar.init({
     date: DataTypes.STRING,
     week: DataTypes.STRING,
     isHoliday: DataTypes.BOOLEAN,
@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     month: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'year2023',
-    tableName: 'year2023s',
+    modelName: 'Calendar',
+    tableName: 'Calendars',
     underscored: true
   });
-  return year2023;
+  return Calendar;
 };

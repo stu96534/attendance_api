@@ -11,7 +11,7 @@ const Str2023 = date2023.map(d => ({
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('year2023s', Array.from({ length: date2023.length }).map((_, i) => ({
+    await queryInterface.bulkInsert('Calendars', Array.from({ length: date2023.length }).map((_, i) => ({
       date: Str2023[i].date,
       month: Str2023[i].month,
       week: Str2023[i].week,
@@ -24,6 +24,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('year2023s', null, {});
+    await queryInterface.bulkDelete('Calendars', null, {});
   }
 };

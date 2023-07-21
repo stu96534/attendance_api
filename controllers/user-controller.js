@@ -9,8 +9,8 @@ const userController = {
     try {
       const userData = req.user.toJSON()
       delete userData.password
-     
-      errStrategies.isErrMsg(userData.locked, '密碼錯誤達五次，已上鎖', 401)
+      
+      errStrategies.errorMsg(userData.locked, '密碼錯誤達五次，已上鎖', 401)
 
       req.user.update({
         errCount: 0

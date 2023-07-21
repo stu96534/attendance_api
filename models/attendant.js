@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Attendant.belongsTo(models.User, { foreignKey: "UserId" })
-      Attendant.belongsTo(models.year2023, { foreignKey: "DateId" })
+      Attendant.belongsTo(models.Calendar, { foreignKey: "CalendarId" })
     }
   };
   Attendant.init({
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     isAbsense: DataTypes.BOOLEAN,
     isAttendant: DataTypes.BOOLEAN,
     UserId: DataTypes.INTEGER,
-    DateId: DataTypes.INTEGER
+    CalendarId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Attendant',

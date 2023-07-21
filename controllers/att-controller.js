@@ -1,4 +1,4 @@
-const { Attendant } = require('../models')
+const { Attendant, Calendar } = require('../models')
 const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
 const errStrategies = require('../middleware/apiError')
 const { isNotPair } = require('../middleware/funcTools')
@@ -14,12 +14,28 @@ const attController = {
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
+      const CalendarDate = await Calendar.findOne({
+        where: {
+          date: GMT_3(date)
+        },
+        raw: true,
+      })
+
+      const attendant = await Attendant.findOne({
+        where: {
+          UserId,
+          CalendarId: CalendarDate.id
+        }
+      })
+
+      errStrategies.errorMsg(attendant, '已打卡上班！', 403)
+
       //上班打卡
       await Attendant.create({
         checkIn: date,
-        date: GMT_3(date),
         isAbsense: true,
-        userId
+        UserId,
+        CalendarId: CalendarDate.id
       })
 
       return res.status(200).json({
@@ -37,28 +53,24 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      errStrategies.errorMsg(isNotPair(Number(id), Number(userId)), '無法編輯此用戶！', 403)
+      errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
+
+      const CalendarDate = await Calendar.findOne({
+        where: {
+          date: GMT_3(date)
+        },
+        raw: true,
+      })
 
 
       let attendant = await Attendant.findOne({
         where: {
           UserId,
-          date: GMT_3(date)
+          CalendarId: CalendarDate.id
         }
       })
 
-      if (!attendant.checkIn) {
-        //上班打卡
-        await attendant.update({
-          checkIn: date,
-          isAbsense: true
-        })
 
-        return res.status(200).json({
-          status: 'success',
-          message: '上班打卡成功'
-        })
-      } else {
         //下班打卡
         await attendant.update({
           checkOut: date
@@ -83,7 +95,7 @@ const attController = {
           status: 'success',
           message: '下班打卡成功'
         })
-      }
+      
     } catch (error) {
       next(error)
     }
