@@ -28,7 +28,7 @@ const attController = {
         }
       })
 
-      errStrategies.errorMsg(attendant, '已打卡上班！', 403)
+      errStrategies.errorMsg(attendant, '已打卡上班！', 401)
 
       //上班打卡
       await Attendant.create({
@@ -62,6 +62,7 @@ const attController = {
         raw: true,
       })
 
+      errStrategies.errorMsg(CalendarDate, '尚未上班打卡！', 401)
 
       let attendant = await Attendant.findOne({
         where: {

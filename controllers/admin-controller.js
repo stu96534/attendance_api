@@ -1,4 +1,4 @@
-const { User, Attendant } = require('../models')
+const { User, Attendant, Calendar } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 const { calendarTransformOwnData, getCalendarOfYear } = require('../helpers/helpers')
@@ -19,12 +19,14 @@ const adminController = {
 
     //員工列表
     User.findAndCountAll({
+      order: [['isAdmin', 'DESC'], ['createdAt', 'DESC']],
       limit,
       offset,
       nest: true,
       raw: true
     })
       .then(users => {
+
         const data = users.rows.map(user => ({
           userId: user.id,
           name: user.name,
@@ -86,12 +88,6 @@ const adminController = {
         isAdmin: false
       })
 
-      const calendar = getCalendarOfYear(createUser,calendar2023)
-
-      calendar.map( async (attendant) => {
-       await Attendant.create(attendant)
-      })
-
       return res.status(200).json({
         status: 'success',
         message: '新增成功'
@@ -113,22 +109,25 @@ const adminController = {
       const offset = getOffset(limit, page)
       
       let attendants = await Attendant.findAndCountAll({
-        where: { UserId, month },
+        include: [{ model: Calendar, where: { month }}],
+        where: { UserId },
+        order: [['createdAt', 'DESC']],
         limit,
         offset,
         nest: true,
         raw: true
       })
 
+
     let data = attendants.rows.map(att => {
         return {
           id: att.id,
-          date: att.date,
-          week: att.week,
+          date: att.Calendar.date,
+          week: att.Calendar.week,
           checkIn: att.checkIn,
           checkOut: att.checkOut,
-          description: att.description,
-          isHoliday: att.isHoliday,
+          description: att.Calendar.description,
+          isHoliday: att.Calendar.isHoliday,
           isAbsense: att.isAbsense,
           isAttendant: att.isAttendant
         }
