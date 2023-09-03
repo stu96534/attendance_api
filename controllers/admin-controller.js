@@ -19,7 +19,7 @@ const adminController = {
 
     //員工列表
     User.findAndCountAll({
-      order: [['isAdmin', 'DESC'], ['createdAt', 'DESC']],
+      order: [['isAdmin', 'DESC']],
       limit,
       offset,
       nest: true,
@@ -97,19 +97,22 @@ const adminController = {
       next(err)
     }
   },
-  getUserAttendant: async (req, res, next) => {
+  getUserAttendants: async (req, res, next) => {
     try {
       const UserId = req.params.id
-      const month = req.query.month
-
+      const month = req.query.month || ''
+      const selectMonth = {}
+      if (month) selectMonth.month = month
+      
       //頁碼
       const DEFAULT_LIMIT = 11
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || DEFAULT_LIMIT
       const offset = getOffset(limit, page)
       
+    
       let attendants = await Attendant.findAndCountAll({
-        include: [{ model: Calendar, where: { month }}],
+        include: [{ model: Calendar, where: selectMonth }],
         where: { UserId },
         order: [['createdAt', 'DESC']],
         limit,
