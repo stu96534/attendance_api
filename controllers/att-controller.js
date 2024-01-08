@@ -1,7 +1,7 @@
-const { Attendant, Calendar } = require('../models')
+const { Attendant } = require('../models')
 const { GMT_3, timestampTransformHours } = require('../helpers/helpers')
 const errStrategies = require('../middleware/apiError')
-const { isNotPair } = require('../middleware/funcTools')
+const { isNotPair, Calendars } = require('../middleware/funcTools')
 
 
 
@@ -11,6 +11,8 @@ const attController = {
       const { date } = req.body
       const UserId = req.params.id
       const userId = req.user.id
+
+      const Calendar = Calendars["2024"]
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 

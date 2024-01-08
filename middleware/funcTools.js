@@ -1,3 +1,11 @@
+const { Calendar, Calendars2024 } = require('../models')
+
+const Calendars = {
+  "2023": Calendar,
+  "2024": Calendars2024
+}
+
+
 const isNotPair = (value1, value2) => {
   if (value1 !== value2) return true
 }
@@ -5,5 +13,6 @@ const isNotPair = (value1, value2) => {
 
 
 module.exports = {
-  isNotPair
+  isNotPair,
+  Calendars
 }
