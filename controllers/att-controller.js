@@ -55,6 +55,8 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
+      const Calendar = Calendars["2024"]
+
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
       const CalendarDate = await Calendar.findOne({
@@ -107,6 +109,9 @@ const attController = {
       const date = req.params.date
       const UserId = req.params.id
       const userId = req.user.id
+
+      
+      const Calendar = Calendars["2024"]
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
