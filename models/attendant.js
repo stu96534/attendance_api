@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     isAbsense: DataTypes.BOOLEAN,
     isAttendant: DataTypes.BOOLEAN,
     UserId: DataTypes.INTEGER,
-    CalendarId: DataTypes.INTEGER
+    CalendarId: DataTypes.INTEGER,
+    year: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Attendant',

@@ -1,9 +1,9 @@
-const { User, Attendant, Calendar } = require('../models')
+const { User, Attendant } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const bcrypt = require('bcryptjs')
 const { calendarTransformOwnData, getCalendarOfYear } = require('../helpers/helpers')
 const errStrategies = require('../middleware/apiError')
-const { notPair } = require('../middleware/funcTools')
+const { Calendars } = require('../middleware/funcTools')
 
 //2023行事曆
 const date2023 = require('../config/2023.json')
@@ -103,6 +103,12 @@ const adminController = {
       const month = req.query.month || ''
       const selectMonth = {}
       if (month) selectMonth.month = month
+
+      const Year = "2023"
+      const year = Year === '2023' ? null : Year
+
+      const Calendar = Calendars[year || '2023'].model
+      const CalendarName = Calendars[year || '2023'].name
       
       //頁碼
       const DEFAULT_LIMIT = 11
@@ -113,7 +119,7 @@ const adminController = {
     
       let attendants = await Attendant.findAndCountAll({
         include: [{ model: Calendar, where: selectMonth }],
-        where: { UserId },
+        where: { UserId, year },
         order: [['createdAt', 'DESC']],
         limit,
         offset,
@@ -125,12 +131,12 @@ const adminController = {
     let data = attendants.rows.map(att => {
         return {
           id: att.id,
-          date: att.Calendar.date,
-          week: att.Calendar.week,
+          date: att[CalendarName].date,
+          week: att[CalendarName].week,
           checkIn: att.checkIn,
           checkOut: att.checkOut,
-          description: att.Calendar.description,
-          isHoliday: att.Calendar.isHoliday,
+          description: att[CalendarName].description,
+          isHoliday: att[CalendarName].isHoliday,
           isAbsense: att.isAbsense,
           isAttendant: att.isAttendant
         }

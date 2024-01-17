@@ -12,7 +12,9 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      const Calendar = Calendars["2024"]
+      const year = new Date(date).getFullYear().toString()
+      
+      const Calendar = Calendars[year].model
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
@@ -26,7 +28,8 @@ const attController = {
       const attendant = await Attendant.findOne({
         where: {
           UserId,
-          CalendarId: CalendarDate.id
+          CalendarId: CalendarDate.id,
+          year
         }
       })
 
@@ -37,8 +40,10 @@ const attController = {
         checkIn: date,
         isAbsense: true,
         UserId,
-        CalendarId: CalendarDate.id
+        CalendarId: CalendarDate.id,
+        year
       })
+
 
       return res.status(200).json({
         status: 'success',
@@ -55,7 +60,9 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      const Calendar = Calendars["2024"]
+      const year = new Date(date).getFullYear().toString()
+
+      const Calendar = Calendars[year].model
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
@@ -69,7 +76,8 @@ const attController = {
       const attendant = await Attendant.findOne({
         where: {
           UserId,
-          CalendarId: CalendarDate.id
+          CalendarId: CalendarDate.id,
+          year
         }
       })
 
@@ -77,7 +85,8 @@ const attController = {
 
       //下班打卡
       await attendant.update({
-        checkOut: date
+        checkOut: date,
+        year: "2024"
       })
 
       //若為上班日且上班未滿8小時，記缺勤
@@ -110,8 +119,9 @@ const attController = {
       const UserId = req.params.id
       const userId = req.user.id
 
-      
-      const Calendar = Calendars["2024"]
+      const year = new Date(Number(date)).getFullYear().toString()
+
+      const Calendar = Calendars[year].model
 
       errStrategies.errorMsg(isNotPair(Number(UserId), Number(userId)), '無法編輯此用戶！', 403)
 
@@ -125,7 +135,8 @@ const attController = {
       const attendant = await Attendant.findOne({
         where: {
           UserId,
-          CalendarId: CalendarDate.id
+          CalendarId: CalendarDate.id,
+          year
         }
       })
 
