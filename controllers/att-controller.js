@@ -86,7 +86,7 @@ const attController = {
       //下班打卡
       await attendant.update({
         checkOut: date,
-        year: "2024"
+        year
       })
 
       //若為上班日且上班未滿8小時，記缺勤

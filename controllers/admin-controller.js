@@ -104,11 +104,10 @@ const adminController = {
       const selectMonth = {}
       if (month) selectMonth.month = month
 
-      const Year = "2023"
-      const year = Year === '2023' ? null : Year
+      const year = req.query.year || new Date().getFullYear().toString()
 
-      const Calendar = Calendars[year || '2023'].model
-      const CalendarName = Calendars[year || '2023'].name
+      const Calendar = Calendars[year].model
+      const CalendarName = Calendars[year].name
       
       //頁碼
       const DEFAULT_LIMIT = 11
@@ -145,6 +144,7 @@ const adminController = {
       return res.status(200).json({
         attendants: data,
         month,
+        year,
         pagination: getPagination(limit, page, attendants.count)
       })
     } catch (err) {
