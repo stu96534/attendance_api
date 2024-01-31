@@ -19,7 +19,7 @@ const adminController = {
 
     //員工列表
     User.findAndCountAll({
-      order: [['isAdmin', 'DESC']],
+      order: [['isAdmin', 'DESC'],['createdAt']],
       limit,
       offset,
       nest: true,
